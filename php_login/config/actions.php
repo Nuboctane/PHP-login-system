@@ -137,10 +137,50 @@
 
 		} elseif($result->num_rows == 1 && $result2->num_rows == 1)  {
 			//found//
-			echo("logged in");
-			echo(", user: " . $result->num_rows);
-			echo(", pass: " . $result2->num_rows);
+			echo("logged in as: " . $_POST['username']);
+		
 		}
 	}
 
+	$servername = "localhost";
+	$dbname     = "bookers";
+	$username   = "root";
+	$password   = "";
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	if ($conn->connect_error) {
+	   die("Connection failed: " . $conn->connect_error);
+	}else{
+		echo("<br> connected to database: ". $dbname);
+	}
+   
+		  $sql = "SELECT * FROM books";
+		  if ($result = $conn->query($sql)) {
+	  $str = "<lu style='list-style-type:none; margin:0; padding:0; margin-top:60px'>";
+	  while ($row = $result->fetch_assoc()) {
+   
+		$str .= "<li><div style='border:1px gray; margin:3px; padding:2px; height: 100px; color: white; font-size: xx-large;'>" .  $row['title'] . " | by: " . $row['author'] ."<button style='float: right;'>HIRE</button>" ."<hr>". "</div></li>";
+	  }
+	  $str .= "</lu>";
+   
+	  $result->free();
+	}
+	$conn->close();
+
+
 ?>
+
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>books</title>
+	</head>
+	<body>
+		<h1>boeken: </h1>
+		<hr>
+		<label value="hoi" for="characters"></label>
+ <div><?php echo $str; ?></div>
+	</body>
+	</html>
